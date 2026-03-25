@@ -287,6 +287,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &574559054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 574559056}
+  - component: {fileID: 574559055}
+  m_Layer: 0
+  m_Name: ResourceSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &574559055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574559054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97064528a7c4f2b44baa40fd88f9ff48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceNodePrefab: {fileID: 6601533466070273167, guid: 454af4b61f2dd654695c3d65baccc822, type: 3}
+  spawnBounds: {fileID: 1342784939}
+  spawnMin: {x: -10, y: -5}
+  spawnMax: {x: 10, y: 5}
+  spawnCount: 5
+  maxSpawnAttempts: 250
+  playerTransform: {fileID: 641712670}
+  minDistanceFromPlayer: 1.5
+  rolls:
+  - type: 0
+    minAmount: 1
+    maxAmount: 3
+    weight: 5
+  - type: 1
+    minAmount: 1
+    maxAmount: 3
+    weight: 3
+  - type: 2
+    minAmount: 1
+    maxAmount: 2
+    weight: 1.5
+  - type: 3
+    minAmount: 1
+    maxAmount: 1
+    weight: 0.2
+--- !u!4 &574559056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574559054}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4980628, y: -0.58424526, z: 0.07845853}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +454,7 @@ GameObject:
   - component: {fileID: 641712672}
   - component: {fileID: 641712671}
   - component: {fileID: 641712674}
+  - component: {fileID: 641712675}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -539,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd15a7c5ed4f7b4791a14395f36a3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  formData: {fileID: 0}
+  formData: {fileID: 11400000, guid: d936d7425cb15fc4891601285be2d441, type: 2}
   groundCheck: {fileID: 186924671}
   groundCheckRadius: 0.08
   groundLayer:
@@ -558,9 +628,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 641712673}
-  humanFormData: {fileID: 0}
-  catFormData: {fileID: 0}
+  humanFormData: {fileID: 11400000, guid: d936d7425cb15fc4891601285be2d441, type: 2}
+  catFormData: {fileID: 11400000, guid: e41b2ca153706214d93b0d77faef032e, type: 2}
   switchKey: 99
+--- !u!114 &641712675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641712668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d21f50dba19f93488b8a936e1aaebc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingResources:
+  - type: 0
+    amount: 0
+  - type: 1
+    amount: 0
+  - type: 2
+    amount: 0
+  - type: 3
+    amount: 0
 --- !u!1 &1342784938
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,3 +794,4 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 641712670}
   - {fileID: 1342784941}
+  - {fileID: 574559056}
