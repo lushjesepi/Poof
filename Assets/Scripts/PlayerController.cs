@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private HumanFormData humanFormData;
     [SerializeField] private CatFormData catFormData;
 
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
     {
         if (playerMovement == null)
             playerMovement = GetComponent<PlayerMovement>();
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void Start()
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
             playerMovement.SetFormData(humanFormData);
 
         // If current was null but humanFormData is also missing, _isCat stays false.
+        ApplySprite(playerMovement.CurrentFormData);
         LogActiveForm();
     }
 
@@ -39,17 +44,30 @@ public class PlayerController : MonoBehaviour
         if (!Input.GetKeyDown(switchKey))
             return;
 
-        _isCat = !_isCat;
-        FormData nextForm = _isCat ? catFormData : humanFormData;
+        // Decide based on what is currently active, not a separate toggled flag.
+        bool currentlyCat = playerMovement.CurrentFormData is CatFormData;
+        bool wantCat = !currentlyCat;
+        FormData nextForm = wantCat ? catFormData : humanFormData;
 
         if (nextForm == null)
         {
-            Debug.LogWarning($"PlayerController: Missing FormData for {(_isCat ? "Cat" : "Human")}.");
+            Debug.LogWarning($"PlayerController: Missing FormData for {(wantCat ? "Cat" : "Human")}.");
             return;
         }
 
         playerMovement.SetFormData(nextForm);
+        _isCat = wantCat;
+        ApplySprite(nextForm);
         LogActiveForm();
+    }
+
+    private void ApplySprite(FormData form)
+    {
+        if (spriteRenderer == null || form == null)
+            return;
+
+        if (form.FormSprite != null)
+            spriteRenderer.sprite = form.FormSprite;
     }
 
     private void LogActiveForm()

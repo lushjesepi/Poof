@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e591e22a088d0474780c966dc1683fd0, type: 3}
   m_Name: CatForm
   m_EditorClassIdentifier: 
-  movementSpeed: 3
+  formSprite: {fileID: 7482667652216324306, guid: 1b0871b68a378184faf42115c6ffa532, type: 3}
+  movementSpeed: 7
   jumpForce: 12

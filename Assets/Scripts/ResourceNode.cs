@@ -6,6 +6,7 @@ public class ResourceNode : MonoBehaviour
     [Header("Collectible")]
     [SerializeField] private ResourceType resourceType = ResourceType.Wood;
     [SerializeField] private int amount = 1;
+    [SerializeField] private bool logOnCollect = false;
 
     /// <summary>
     /// Allows a spawner to configure the node at runtime.
@@ -43,6 +44,8 @@ public class ResourceNode : MonoBehaviour
             return;
 
         inventory.AddResource(resourceType, amount);
+        if (logOnCollect)
+            Debug.Log($"Collected {amount} {resourceType}. Total now: {inventory.GetResourceAmount(resourceType)}");
         Destroy(gameObject);
     }
 }

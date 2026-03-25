@@ -48,15 +48,22 @@ public class Inventory : MonoBehaviour
             _resources[type] = amount;
     }
 
-    public void RemoveResource(ResourceType type, int amount)
+    /// <summary>
+    /// Attempts to remove the given amount. Returns true if fully removed.
+    /// </summary>
+    public bool RemoveResource(ResourceType type, int amount)
     {
         if (amount <= 0)
-            return;
+            return true;
 
         if (!_resources.TryGetValue(type, out int current))
-            return;
+            return false;
 
-        _resources[type] = Mathf.Max(0, current - amount);
+        if (current < amount)
+            return false;
+
+        _resources[type] = current - amount;
+        return true;
     }
 
     public bool HasResource(ResourceType type, int amount)
@@ -65,6 +72,11 @@ public class Inventory : MonoBehaviour
             return true;
 
         return _resources.TryGetValue(type, out int current) && current >= amount;
+    }
+
+    public int GetResourceAmount(ResourceType type)
+    {
+        return _resources.TryGetValue(type, out int current) ? current : 0;
     }
 }
 
