@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(Inventory))]
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
@@ -8,6 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private HumanFormData humanFormData;
     [SerializeField] private CatFormData catFormData;
+
+    private Inventory _inventory;
+
+    private const ResourceType TransformationResource = ResourceType.FallenStar;
+    private const int TransformationCost = 5;
 
     [Header("Switching")]
     [Tooltip("Key used to toggle between Human and Cat forms.")]
@@ -22,6 +28,10 @@ public class PlayerController : MonoBehaviour
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        _inventory = GetComponent<Inventory>();
+        if (_inventory == null)
+            _inventory = GetComponentInParent<Inventory>();
     }
 
     private void Start()
@@ -54,6 +64,19 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning($"PlayerController: Missing FormData for {(wantCat ? "Cat" : "Human")}.");
             return;
         }
+
+        if (_inventory == null)
+        {
+            Debug.LogWarning("PlayerController: Missing Inventory reference.");
+            return;
+        }
+
+        // Pay the resource cost before allowing the transformation.
+        if (!_inventory.HasResource(TransformationResource, TransformationCost))
+            return;
+
+        if (!_inventory.RemoveResource(TransformationResource, TransformationCost))
+            return;
 
         playerMovement.SetFormData(nextForm);
         _isCat = wantCat;
