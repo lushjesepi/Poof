@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   formSprite: {fileID: 21300000, guid: 50e82ada220853347891dfa4aa991ed1, type: 3}
   movementSpeed: 3
-  jumpForce: 8
+  jumpForce: 9

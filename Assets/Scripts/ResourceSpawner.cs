@@ -20,6 +20,13 @@ public class ResourceSpawner : MonoBehaviour
     [SerializeField] private Vector2Int ironSpawnCount = new Vector2Int(2, 6);
     [SerializeField] private Vector2Int fallenStarSpawnCount = new Vector2Int(1, 4);
 
+    [Header("Manual Spawn Offsets (per resource type)")]
+    [Tooltip("Extra position offset applied to spawned nodes of this type (e.g., raise Y so they appear above ground).")]
+    [SerializeField] private Vector2 woodPositionOffset = Vector2.zero;
+    [SerializeField] private Vector2 stonePositionOffset = Vector2.zero;
+    [SerializeField] private Vector2 ironPositionOffset = Vector2.zero;
+    [SerializeField] private Vector2 fallenStarPositionOffset = Vector2.zero;
+
     [SerializeField] private Vector2Int woodAmountRange = new Vector2Int(1, 3);
     [SerializeField] private Vector2Int stoneAmountRange = new Vector2Int(1, 3);
     [SerializeField] private Vector2Int ironAmountRange = new Vector2Int(1, 2);
@@ -61,7 +68,7 @@ public class ResourceSpawner : MonoBehaviour
 
         for (int i = 0; i < spawnCount; i++)
         {
-            Vector2 pos = GetRandomPosition(bounds);
+            Vector2 pos = GetRandomPosition(bounds) + GetPositionOffsetForType(type);
             int amount = Random.Range(amountMin, amountMax + 1);
 
             ResourceNode node = Instantiate(prefab, new Vector3(pos.x, pos.y, 0f), Quaternion.identity, transform);
@@ -69,6 +76,18 @@ public class ResourceSpawner : MonoBehaviour
             // Ensure the spawned node matches the type/amount we picked.
             // (This is safe even if your prefab is already configured.)
             node.Initialize(type, amount);
+        }
+    }
+
+    private Vector2 GetPositionOffsetForType(ResourceType type)
+    {
+        switch (type)
+        {
+            case ResourceType.Wood: return woodPositionOffset;
+            case ResourceType.Stone: return stonePositionOffset;
+            case ResourceType.Iron: return ironPositionOffset;
+            case ResourceType.FallenStar: return fallenStarPositionOffset;
+            default: return Vector2.zero;
         }
     }
 

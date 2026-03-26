@@ -79,5 +79,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public FormData CurrentFormData => formData;
+
+    public Transform GroundCheckTransform => groundCheck;
 }
 
