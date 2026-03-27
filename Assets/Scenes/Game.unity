@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 8300000, guid: 3dd1970c26de3f345b21a652c019a97b, type: 3}
-  backgroundMusicVolume: 0.6
+  backgroundMusicVolume: 0.4
   playMusicOnStart: 1
   resourcePickupSfx: {fileID: 8300000, guid: c8e421f9e866f6f45b12d1f72914448f, type: 3}
   resourcePickupVolume: 0.9
