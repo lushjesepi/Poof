@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 540141d4be046bd40b7f875d5ff16272, type: 3}
   m_Name: HumanForm
   m_EditorClassIdentifier: 
-  formSprite: {fileID: 21300000, guid: 50e82ada220853347891dfa4aa991ed1, type: 3}
-  movementSpeed: 3
+  formSprite: {fileID: 21300000, guid: 4cc3dcef4ab9d964d9aaefbfa836089f, type: 3}
+  movementSpeed: 5
   jumpForce: 9

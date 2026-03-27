@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(Inventory))]
@@ -53,8 +54,15 @@ public class PlayerController : MonoBehaviour
     [Header("Switching")]
     [Tooltip("Key used to toggle between Human and Cat forms.")]
     [SerializeField] private KeyCode switchKey = KeyCode.C;
+    [Tooltip("How long cat form lasts before automatically returning to human form.")]
+    [SerializeField] private float catFormDurationSeconds = 45f;
 
     private bool _isCat;
+    private float _catFormTimeRemaining;
+    private bool _isDead;
+
+    [Header("Death")]
+    [SerializeField] private UnityEvent onPlayerDied;
 
     private void Awake()
     {
@@ -86,6 +94,7 @@ public class PlayerController : MonoBehaviour
 
         // If current was null but humanFormData is also missing, _isCat stays false.
         ApplySprite(playerMovement.CurrentFormData);
+        _catFormTimeRemaining = _isCat ? catFormDurationSeconds : 0f;
         CacheHumanColliderValuesIfNeeded();
         ApplyColliderForCurrentForm();
         LogActiveForm();
@@ -93,6 +102,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (_isDead)
+            return;
+
+        HandleCatFormTimer();
+
         if (!Input.GetKeyDown(switchKey))
             return;
 
@@ -120,8 +134,30 @@ public class PlayerController : MonoBehaviour
         if (!_inventory.RemoveResource(TransformationResource, TransformationCost))
             return;
 
+        ApplyForm(nextForm, wantCat);
+    }
+
+    private void HandleCatFormTimer()
+    {
+        if (!_isCat || humanFormData == null)
+            return;
+
+        _catFormTimeRemaining -= Time.deltaTime;
+        if (_catFormTimeRemaining > 0f)
+            return;
+
+        // Auto-revert does not consume resources.
+        ApplyForm(humanFormData, false);
+    }
+
+    private void ApplyForm(FormData nextForm, bool isCat)
+    {
+        if (_isDead || nextForm == null)
+            return;
+
         playerMovement.SetFormData(nextForm);
-        _isCat = wantCat;
+        _isCat = isCat;
+        _catFormTimeRemaining = _isCat ? catFormDurationSeconds : 0f;
         ApplySprite(nextForm);
         ApplyColliderForCurrentForm();
         LogActiveForm();
@@ -261,6 +297,38 @@ public class PlayerController : MonoBehaviour
 
             playerMovement.GroundCheckTransform.localPosition = localPos;
         }
+    }
+
+    public bool IsCatForm => _isCat;
+    public float CatFormTimeRemaining => Mathf.Max(0f, _catFormTimeRemaining);
+    public float CatFormDurationSeconds => catFormDurationSeconds;
+    public bool IsDead => _isDead;
+
+    public void Die()
+    {
+        if (_isDead)
+            return;
+
+        // If the player already won by repairing the ship, don't allow enemies to kill them.
+        if (GameManager.Instance != null && GameManager.Instance.IsWin)
+            return;
+
+        _isDead = true;
+        _isCat = false;
+        _catFormTimeRemaining = 0f;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayPlayerDeath();
+
+        if (playerMovement != null)
+            playerMovement.enabled = false;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        onPlayerDied?.Invoke();
+        Debug.Log("Player died.");
     }
 }
 

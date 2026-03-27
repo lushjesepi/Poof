@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
 
         _isWin = true;
         Debug.Log("WIN! Ship is fully repaired.");
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayWin();
         OnWin?.Invoke();
     }
 

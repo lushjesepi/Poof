@@ -44,6 +44,8 @@ public class ResourceNode : MonoBehaviour
             return;
 
         inventory.AddResource(resourceType, amount);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayResourcePickup();
         if (logOnCollect)
             Debug.Log($"Collected {amount} {resourceType}. Total now: {inventory.GetResourceAmount(resourceType)}");
         Destroy(gameObject);
